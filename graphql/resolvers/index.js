@@ -4,6 +4,16 @@ const bcrypt = require('bcryptjs');
 
 const Event = require('../../models/event');
 const User = require('../../models/user');
+const Booking = require('../../models/booking');
+
+const singleEvent = async eventId => {
+    try {
+        const event = await Event.findById(eventId);
+        return {...event._doc, creator: user.bind(this, event.creator)};
+    } catch(err) {
+        throw err;
+    }
+}
 
 const events = eventIds => {
     // list of all the events in MongoDB that have id
@@ -40,6 +50,22 @@ module.exports = {
             console.log(err);
             throw err;
         });
+    },
+
+    bookings: async () => {
+        try {
+            const bookings = await Booking.find();
+            return bookings.map(booking => {
+                return {...booking._doc,
+                        user: user.bind(this, booking._doc.user),
+                        event: singleEvent.bind(this, booking._doc.event),
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()};
+            });
+        } catch(err) {
+            throw err;
+        }
+
     },
     createEvent: (args) => {
         
@@ -103,5 +129,26 @@ module.exports = {
                 throw err;
             })
         
+    },
+    bookEvent: async (args) => {
+        const fetchedEvent = await Event.findOne({_id : args.eventId});
+        const booking = new Booking({
+            user: "5c8869c5caac53a6795e2e47",
+            event: fetchedEvent
+        })
+
+        const result = await booking.save();
+
+        return {...result._doc, createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            user: user.bind(this, result.user),
+            event: singleEvent.bind(this, result.event)};
+    },
+    cancelBooking: async (args) => {
+        try {
+            await Booking.deleteOne({_id: args.bookingID});
+        } catch(err) {
+            throw err;
+        }
     }
 }
