@@ -29,9 +29,9 @@ const events = eventIds => {
 }
 
 const user = userId => {
-    return User.findById(userId).then(user => {
-        return {...user._doc,
-                eventsCreated: events.bind(this, ...user._doc.eventsCreated)};
+    return User.findById(userId).then(foundUser => {
+        return { ...foundUser._doc,
+                eventsCreated: events.bind(this, foundUser._doc.eventsCreated)};
     }).catch(err => {
         console.log(err);
         throw err;
@@ -42,7 +42,6 @@ module.exports = {
     events: () => {
         return Event.find().then(result => {
             return result.map(event => {
-                console.log(event);
                 return {...event._doc,
                         creator: user.bind(this, event._doc.creator)};
             });
@@ -146,7 +145,10 @@ module.exports = {
     },
     cancelBooking: async (args) => {
         try {
+            const booking = await Booking.findById(args.bookingID).populate('event');
+            const event = {...booking.event._doc, creator: user.bind(this, booking.event._doc.creator) };
             await Booking.deleteOne({_id: args.bookingID});
+            return event;
         } catch(err) {
             throw err;
         }
