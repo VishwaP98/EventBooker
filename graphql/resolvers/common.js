@@ -15,15 +15,19 @@ const singleEvent = async eventId => {
 const events = async eventIds => {
     // list of all the events in MongoDB that have id
     // matching to any one id in eventsIds
-
+    console.log("The provided eventIds are : " + eventIds);
+    console.log("--------------------------------------");
     try {
-        const events = await Event.find({_id : {$in: eventIds}});
-        return events.map(event => {
+        const events = await Event.find({ _id: { $in: eventIds } });
+        console.log("The processed events are : " + events);
+        console.log("0000000000000000000000");
+        const transformedEvents = await events.map(event => {
             return transformEvent(event);
         });
 
+        console.log("The transformed events are : " + transformedEvents);
+        return transformedEvents;
     } catch (err) {
-        console.log(err);
         throw err;
     }
 };
@@ -31,12 +35,10 @@ const events = async eventIds => {
 const user = async userId => {
 
     try {
-
         const userFound = await User.findById(userId);
-
         return { 
             ...userFound._doc,
-            eventsCreated: events.bind(this, userFound.eventsCreated)
+            eventsCreated: events.bind(this, userFound._doc.eventsCreated)
         };
     
     } catch (err) {
@@ -49,7 +51,7 @@ const user = async userId => {
 const transformEvent = async event => {
     return {
         ...event._doc,
-        creator: user.bind(this, event.creator)
+        creator: user.bind(this, event._doc.creator)
     };
 };
 

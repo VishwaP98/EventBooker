@@ -31,7 +31,7 @@ module.exports = buildSchema(`
             _id: ID!
             email: String!
             password: String
-            eventsCreated: [Event!]
+            eventsCreated: [Event!]!
         }
 
         input UserInput {
