@@ -20,7 +20,6 @@ const events = async eventIds => {
     try {
         const events = await Event.find({ _id: { $in: eventIds } });
         console.log("The processed events are : " + events);
-        console.log("0000000000000000000000");
         const transformedEvents = await events.map(event => {
             return transformEvent(event);
         });
