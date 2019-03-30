@@ -3,11 +3,14 @@ const bodyParser = require('body-parser');
 const graphQlHttp = require('express-graphql');
 const mongoose = require('mongoose');
 const app = express(); // uses express imported from express package
+const isAuthorized = require('./helpers/checkAuthorized')
 
 const resolvers = require("./graphql/resolvers/index");
 const schema = require("./graphql/schema/index");
 
 app.use(bodyParser.json());
+
+app.use(isAuthorized); // uses as a middleware to check if user authorized or not
 
 app.use('/graphql', graphQlHttp({
     schema: schema,  // schema points to valid graphql schema
