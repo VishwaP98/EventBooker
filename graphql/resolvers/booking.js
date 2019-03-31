@@ -4,7 +4,12 @@ const Event = require('../../models/event');
 const { transformBooking, transformEvent } = require('./common');
 
 module.exports = {
-    bookings: async () => {
+    bookings: async (args, req) => {
+
+        if(!req.isAuthorized) {
+            throw new Error("User is not authorized");
+        }
+
         try {
             const bookings = await Booking.find();
             return bookings.map(booking => {
@@ -20,7 +25,7 @@ module.exports = {
     bookEvent: async (args) => {
         const fetchedEvent = await Event.findOne({_id : args.eventId});
         const booking = new Booking({
-            user: "5c8869c5caac53a6795e2e47",
+            user: req.userId,
             event: fetchedEvent
         })
 
@@ -28,7 +33,12 @@ module.exports = {
 
         return transformBooking(result);
     },
-    cancelBooking: async (args) => {
+    cancelBooking: async (args, req) => {
+
+        if(!req.isAuthorized) {
+            throw new Error("User is not authorized");
+        }
+
         try {
             const booking = await Booking.findById(args.bookingID).populate('event');
             const event = transformEvent(booking.event);

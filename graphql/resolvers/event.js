@@ -25,7 +25,7 @@ module.exports = {
             description: args.input.description,
             price: +args.input.price,
             date: new Date().toISOString(),
-            creator: "5c9be2b2d0122d28752115eb"
+            creator: req.userId
         });
 
         // save this event into the database
@@ -37,7 +37,7 @@ module.exports = {
 
             // first of all check if the user is valid or not
 
-            const creatorResult = await User.findById("5c9be2b2d0122d28752115eb").populate("eventsCreated");
+            const creatorResult = await User.findById(req.userId).populate("eventsCreated");
 
             if(!creatorResult) {
                 throw new Error("User not found.");
