@@ -13,7 +13,7 @@ class App extends Component {
       <BrowserRouter>
         <React.Fragment>
           <MainNavigation/>
-            <main>
+            <main className="main-content">
             <Switch>
               <Redirect from="/" to="/user" exact/>
               <Route path="/user" component={UserPage}/>
