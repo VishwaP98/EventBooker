@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { NavLink } from 'react-router-dom';
+import './Navigation.css'
  
 const mainNavigation = props => {
-    return (<header>
+    return (<header className="main-navigation">
         <div className="main-navigation__logo">
             <h1>The Navbar</h1>
         </div>
