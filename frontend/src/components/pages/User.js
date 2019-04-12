@@ -2,10 +2,20 @@ import React, { Component } from "react";
 import './User.css';
 class UserPage extends Component {
 
+    state = {
+        isLogin: true
+    };
+
     constructor(props) {
         super(props);
         this.emailElement = React.createRef();
         this.passwordElement = React.createRef();
+    }
+
+    switchHandler = () => {
+        this.setState(prevState => {
+            return {isLogin: !prevState.isLogin};
+        });
     }
 
     submitHandler = (event) => {
@@ -19,17 +29,29 @@ class UserPage extends Component {
 
         console.log(email, password);
 
-        const requestBody = {
-
+        let requestBody = {
             query: `
-                mutation {
-                    createUser(userInput: {email: "${email}", password: "${password}"}) {
-                        _id
-                        email
+                query {
+                    login(email: "${email}", password: "${password}") {
+                        userID
+                        token
+                        tokenExpiration
                     }
-                }    
+                }
             `
+        }
 
+        if(!this.state.isLogin) { // if not login mode then set create user request
+            requestBody = {
+                query: `
+                    mutation {
+                        createUser(userInput: {email: "${email}", password: "${password}"}) {
+                            _id
+                            email
+                        }
+                    }    
+                `
+            }
         } 
 
         // send a request to the backend
@@ -70,7 +92,9 @@ class UserPage extends Component {
 
             <div className="form-actions">
                 <button type="submit">Submit</button>
-                <button type="button">SignUp</button>
+                <button type="button" onClick={this.switchHandler}>
+                    Switch to {this.state.isLogin ? "SignUp" : "Login"}
+                </button>
             </div>
 
         </form>);
