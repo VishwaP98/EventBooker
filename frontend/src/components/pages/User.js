@@ -39,7 +39,21 @@ class UserPage extends Component {
             headers: {
                 "Content-Type": "application/json"
             }
-        })
+        }).then(res => {
+            if(res.status !== 200 && res.status !== 201) {
+                throw new Error("Something failed!");
+            }
+            
+            // otherwise just return the response json
+            return res.json();
+        }).then(resData => {
+            
+            console.log(resData);
+
+        }).catch(err => {
+            // this err is not from backend but possibly a network error
+            console.log(err);
+        });
     }
 
     render() {
