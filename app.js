@@ -10,7 +10,23 @@ const schema = require("./graphql/schema/index");
 
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+
+    res.setHeader('Access-Control-Allow-Origin', "*"); // every host can send request to this server
+    res.setHeader('Access-Control-Allow-Methods', "POST,GET,OPTIONS"); //  allow these methods
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    if(req.method === 'OPTIONS') {
+        return res.sendStatus(200); // handle this request with response status 200
+    }
+
+    // otherwise let the request continue its journey
+    next();
+
+});
+
 app.use(isAuthorized); // uses as a middleware to check if user authorized or not
+
 
 app.use('/graphql', graphQlHttp({
     schema: schema,  // schema points to valid graphql schema
@@ -25,7 +41,7 @@ app.use('/graphql', graphQlHttp({
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${
     process.env.MONGO_PASSWORD
 }@cluster0-3uycy.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`).then(() => {
-    app.listen(3000);
+    app.listen(8000); // frontend server runs on port 3000 as default
 }).catch(err => {
     console.log(err);
 })

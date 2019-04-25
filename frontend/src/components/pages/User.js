@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import './User.css';
+import UserContext from '../context/auth-context';
+
 class UserPage extends Component {
 
     state = {
         isLogin: true
     };
+
+    static contextType = UserContext;
 
     constructor(props) {
         super(props);
@@ -71,6 +75,12 @@ class UserPage extends Component {
         }).then(resData => {
             
             console.log(resData);
+
+            if(resData.data.login.token) {
+                this.context.login(resData.data.login.token,
+                    resData.data.login.userID,
+                    resData.data.login.tokenExpiration);
+            }
 
         }).catch(err => {
             // this err is not from backend but possibly a network error
