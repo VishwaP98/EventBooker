@@ -9,11 +9,11 @@ const mainNavigation = props => (
             return (
                 <header className="main-navigation">
                     <div className="main-navigation__logo">
-                        <h1>The Navbar</h1>
+                        <h1>EventBooker</h1>
                     </div>
                     <nav className="items">
                         <ul>
-                            {!context.token && <li><NavLink to="/user">Verfiy</NavLink></li>}
+                            {!context.token && <li><NavLink to="/user">Login</NavLink></li>}
                             <li><NavLink to="/events">Events</NavLink></li>
                             {context.token && <li><NavLink to="/bookings">Bookings</NavLink></li>}
                         </ul>
