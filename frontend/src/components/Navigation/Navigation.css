@@ -5,7 +5,7 @@
     width: 100%;
     height: 4rem;
     background: rgb(199, 60, 6);
-    padding: 0 1rem;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -18,7 +18,7 @@
 }
 
 .items {
-    margin: 0 1.5rem 0 1.5rem; /* top right down left */
+    margin: 0 1rem 0 1rem; /* top right down left */
 }
 
 .items ul {
@@ -26,10 +26,11 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    align-items: center;
 }
 
 .items li {
-    margin: 0 1rem; /* 0 is for top-bottom, 1rem is for left-right*/
+    margin: 0 0.75rem; /* 0 is for top-bottom, 1rem is for left-right*/
 }
 
 .items a,
@@ -38,7 +39,9 @@
     text-decoration: none;
     color: hsl(37, 100%, 50%);
     font-size: 1.25rem;
+    border: none;
     background: transparent;
+    cursor: pointer
 }
 
 .items a:hover,
@@ -46,7 +49,7 @@
 .items a.active,
 .items button:active,
 .items button:hover { /* a.active means whenever the element is active */
-    background-color: hsl(37, 100%, 50%);
-    border-radius: 50px;
+    background-color: white;
+    border-radius: 7px;
     color: rgb(255, 81, 0);
 }
