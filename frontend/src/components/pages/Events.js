@@ -3,11 +3,16 @@ import React, { Component } from "react";
 import './Events.css';
 import Modal from '../Modal/Modal';
 import Backdrop from '../Backdrop/Backdrop';
+import UserContext from '../Context/auth-context';
 
 class EventsPage extends Component {
     state = {
         creatingEvent: false
     };
+
+    // allows us to use nearest curr value of that context type
+    // that is passed by App.js using this.context
+    static contextType = UserContext; 
 
     constructor(props) {
         super(props);
@@ -15,7 +20,6 @@ class EventsPage extends Component {
         this.priceElement = React.createRef();
         this.dateElement = React.createRef();
         this.descriptionElement = React.createRef();
-
     }
 
     handleCreateEvent = () => {
@@ -40,13 +44,54 @@ class EventsPage extends Component {
         const date = this.dateElement.current.value;
         const description = this.descriptionElement.current.value;
 
-        if(title.trim().length === 0 || price.trim().length === 0
+        if(title.trim().length === 0 || price <= 0
             || date.trim().length === 0 || description.trim().length === 0) {
                 return;
         }
 
         const event = {title: title, price: price, date: date, description: description};
         console.log(event);
+
+        let requestBody = {
+            query: `
+                mutation {
+                    createEvent(input: {title: "${title}", description: "${description}", price: ${price}, date: "${date}"}) {
+                        _id
+                        title
+                        description
+                        price
+                        date
+                        creator {
+                            _id
+                            email
+                        }
+                    }
+                }
+                `
+        }; // define the request body
+
+        // need to send this request to the backend using fetch method
+
+        const token = this.context.token;
+
+        fetch('http://localhost:8000/graphql', {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            }
+        }).then(res => {
+            if(res.status !== 200 && res.status !== 201) {
+                throw new Error("Failed!");
+            }
+
+            return res.json();
+        }).then(resData => {
+            console.log(resData);
+        }).catch(err => {
+            console.log(err);
+        });
 
     }
 
