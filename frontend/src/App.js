@@ -6,7 +6,7 @@ import UserPage from './components/pages/User';
 import EventsPage from './components/pages/Events';
 import BookingsPage from './components/pages/Bookings';
 import MainNavigation from './components/Navigation/Navigation';
-import UserContext from './components/context/auth-context';
+import UserContext from './components/Context/auth-context';
 
 class App extends Component {
 
@@ -44,7 +44,6 @@ class App extends Component {
                 {this.state.token && <Route path="/bookings" component={BookingsPage}/>}
                 {!this.state.token && <Redirect to="/user" exact/>}
               </Switch>
-
             </main>
 
           </UserContext.Provider>

@@ -41,7 +41,7 @@ app.use('/graphql', graphQlHttp({
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${
     process.env.MONGO_PASSWORD
 }@cluster0-3uycy.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`).then(() => {
-    app.listen(8000); // frontend server runs on port 3000 as default
+    app.listen(8000); // frontend server runs on port 3000 as default so use port 8000
 }).catch(err => {
     console.log(err);
 })
