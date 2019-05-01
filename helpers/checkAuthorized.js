@@ -9,7 +9,8 @@ module.exports = (req, res, next) => {
         return next();
     }
 
-    const token = authHeader.split()[1];
+    const token = authHeader.split(" ")[1];
+    console.log(token + " is the token");
 
     if(!token || token === "") {
         req.isAuthorized = false;
@@ -29,6 +30,7 @@ module.exports = (req, res, next) => {
     }
 
     req.isAuthorized = true;
-    req.userId = decodedToken.userId;
+    req.userId = decodedToken.userID;
+    console.log(decodedToken.userID + " is the userId");
     next();
 }

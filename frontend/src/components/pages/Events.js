@@ -7,7 +7,8 @@ import UserContext from '../Context/auth-context';
 
 class EventsPage extends Component {
     state = {
-        creatingEvent: false
+        creatingEvent: false,
+        events: []
     };
 
     // allows us to use nearest curr value of that context type
@@ -20,6 +21,11 @@ class EventsPage extends Component {
         this.priceElement = React.createRef();
         this.dateElement = React.createRef();
         this.descriptionElement = React.createRef();
+    }
+
+    componentDidMount() {
+        // executes when page loads
+        this.fetchEvents();
     }
 
     handleCreateEvent = () => {
@@ -89,6 +95,50 @@ class EventsPage extends Component {
             return res.json();
         }).then(resData => {
             console.log(resData);
+            this.fetchEvents();
+        }).catch(err => {
+            console.log(err);
+        });
+
+    }
+
+    fetchEvents() {
+        let requestBody = {
+            query: `
+                query {
+                    events {
+                        _id
+                        title
+                        description
+                        price
+                        date
+                        creator {
+                            _id
+                            email
+                        }
+                    }
+                }
+                `
+        }; // define the request body
+
+        // need to send this request to the backend using fetch method
+
+        fetch('http://localhost:8000/graphql', {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(res => {
+            if(res.status !== 200 && res.status !== 201) {
+                throw new Error("Failed!");
+            }
+
+            return res.json();
+        }).then(resData => {
+            console.log(resData);
+            const events = resData.data.events;
+            this.setState({events: events});
         }).catch(err => {
             console.log(err);
         });
@@ -96,6 +146,15 @@ class EventsPage extends Component {
     }
 
     render() {
+
+        // prepare the list of events here
+        const eventsList = this.state.events.map(event => {
+            return (
+                <li key={event._id} className="event_item">
+                    {event.title}
+                </li>);
+        });
+
         return (
             <React.Fragment>
                 {this.state.creatingEvent && <Backdrop/>}
@@ -126,10 +185,14 @@ class EventsPage extends Component {
                         </form>
                     </Modal>
                 }
-                <div className="createEvent">
+                {this.context.token && <div className="createEvent">
                     <p className="eventsHeader">Invite others to your event</p>
                     <button className="eventBtn" onClick={this.handleCreateEvent}>Create Event</button>
-                </div>
+                </div>}
+
+                <ul className="events_list">
+                   {eventsList}
+                </ul>
             
             </React.Fragment>);
     }

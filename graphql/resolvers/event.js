@@ -24,7 +24,7 @@ module.exports = {
             title: args.input.title,
             description: args.input.description,
             price: +args.input.price,
-            date: new Date().toISOString(),
+            date: args.input.date,
             creator: req.userId
         });
 

@@ -53,10 +53,10 @@ class UserPage extends Component {
                             _id
                             email
                         }
-                    }    
+                    }
                 `
             }
-        } 
+        }
 
         // send a request to the backend
         fetch("http://localhost:8000/graphql", {
