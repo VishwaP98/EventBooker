@@ -20,7 +20,7 @@ body {
 }
 
 .form-actions button,
-.eventBtn {
+.btn {
     background: rgb(199, 60, 6);
     font: inherit;
     border: 1px solid rgb(199, 60, 6);
@@ -34,8 +34,8 @@ body {
 
 .form-actions button:hover,
 .form-actions button:active,
-.eventBtn:hover,
-.eventBtn:active {
+.btn:hover,
+.btn:active {
     background: rgb(185, 57, 6);
     border-color:  rgb(185, 57, 6);
 }

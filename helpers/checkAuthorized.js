@@ -32,5 +32,6 @@ module.exports = (req, res, next) => {
     req.isAuthorized = true;
     req.userId = decodedToken.userID;
     console.log(decodedToken.userID + " is the userId");
+    console.log("Successfully done checking authorization");
     next();
 }
