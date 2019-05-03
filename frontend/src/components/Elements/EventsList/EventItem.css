@@ -1,0 +1,25 @@
+
+.event_item {
+    margin: 1rem 0;
+    padding: 1rem;
+    border: 1px solid rgb(185, 57, 6);
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.event_item h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color:  rgb(185, 57, 6);
+}
+
+.event_item h2 {
+    margin: 1rem 0rem;
+    font-size: 1rem;
+}
+
+.event_item p {
+    margin: 0 0.5rem;
+    padding: 0;
+}
