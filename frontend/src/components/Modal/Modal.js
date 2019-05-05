@@ -8,8 +8,11 @@ const modal = (props) => {
         </header>
         <section className="modal_content">{props.children}</section>
         <section className="modal_abilities">
-            <button className="eventBtn" onClick={props.onCancel}>Cancel</button>
-            <button className="eventBtn" onClick={props.onConfirm}>Confirm</button>
+            <button className="btn" onClick={props.onCancel}>Cancel</button>
+            {props.affirmAvailable && <button 
+                className="btn"
+                onClick={props.onConfirm}
+                >{props.affirmText}</button>}
         </section>
     </div>);
 
