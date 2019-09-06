@@ -3,14 +3,16 @@ import React, { Component } from "react";
 import UserContext from '../Context/auth-context';
 import Spinner from '../Elements/Spinner/Spinner';
 import BookingList from '../Elements/BookingsList/BookingList';
+import BookingChart from '../Elements/BookingChart/BookingChart';
+import BookingControls from "../Elements/BookingControls/BookingControls";
 
 class BookingsPage extends Component {
 
     state = {
         isLoading: false,
-        bookings: []
+        bookings: [],
+        outputType: 'list'
     };
-
 
     static contextType = UserContext;
 
@@ -79,6 +81,7 @@ class BookingsPage extends Component {
                             _id
                             title
                             date
+                            price
                         }
                     }
                 }
@@ -112,17 +115,39 @@ class BookingsPage extends Component {
 
     }
 
+    findOutputTypeHandler = (outputType) => {
+
+        let newType = null
+        
+        if(outputType === 'list'){
+            newType = outputType
+        } else {
+            newType = 'chart'
+        }
+
+        this.setState({outputType: newType})
+    }
+
     render() {
-        return (
-            
-            <React.Fragment>
 
-                {this.state.isLoading ? <Spinner/> : (
-                    <BookingList bookings={this.state.bookings} onCancel={this.cancelBookingHandler}/>
-                )}
+        let content = <Spinner/>
 
-            </React.Fragment>
-        );
+        if(!this.state.isLoading) {
+            // if not loading
+
+            content = (
+                <React.Fragment>
+                    <BookingControls outputType={this.state.outputType} onOutputChange={this.findOutputTypeHandler}/>
+                    <div>
+                        {this.state.outputType === 'list' ? (<BookingList bookings={this.state.bookings} onCancel={this.cancelBookingHandler}/>) : 
+                        (<BookingChart bookings={this.state.bookings}/>)}
+                    </div>
+                </React.Fragment>
+            )
+
+        }
+
+        return <React.Fragment>{content}</React.Fragment>
     }
 }
 
