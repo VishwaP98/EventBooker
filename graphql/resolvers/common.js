@@ -24,11 +24,19 @@ const singleEvent = async eventId => {
 
 const events = async eventIds => {
     // list of all the events in MongoDB that have id
-    // matching to any one id in eventsIds
+    // matching to any one id in eventIds
     console.log("The provided eventIds are : " + eventIds);
     console.log("--------------------------------------");
     try {
+        // MongoDB does not necessarily send the events in the same order as
+        // the eventIds so we will have to add our custom comparator
         const events = await Event.find({ _id: { $in: eventIds } });
+
+        events.sort((a,b) => {
+            return eventIds.indexOf(a._id.toString()) - eventIds.indexOf(b._id.toString());
+        })
+
+        console.log(events, eventIds);
         console.log("The processed events are : " + events);
         const transformedEvents = await events.map(event => {
             return transformEvent(event);
